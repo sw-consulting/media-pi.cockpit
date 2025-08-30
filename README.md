@@ -1,15 +1,43 @@
 # media-pi.cockpit
 
-Media PI Cockpit & sshd Container
+Media PI Cockpit & sshd container that exposes Cockpit Web UI and a restricted SSH endpoint for reverse UNIX socket tunnels from devices. Dynamic SSH key authorization is delegated to the Media Pi Core API.
 
-gateway/
+Project layout
 ├─ gateway.Dockerfile
 ├─ entrypoint.sh
-├─ defaults/
-│  ├─ cockpit/cockpit.conf
-│  ├─ ssh/mediapi.conf
-│  ├─ sshd/sshd_config
-│  └─ supervisor/
-│     ├─ cockpit.conf
-│     └─ sshd.conf
-└─ ak-lookup.sh
+├─ ak-lookup.sh
+└─ defaults/
+   ├─ cockpit/cockpit.conf
+   ├─ ssh/mediapi.conf
+   ├─ sshd/sshd_config
+   └─ supervisor/
+      ├─ cockpit.conf
+      └─ sshd.conf
+
+Requirements
+- CORE_API: Base URL to core API, e.g. https://core.example.com/api
+- CORE_TOKEN: Shared secret (Bearer token) for ak-lookup
+
+Build
+docker build -f gateway.Dockerfile -t mediapi/gateway .
+
+Run (example)
+- Persist host keys so device fingerprints remain stable:
+  -v mediapi-sshd:/etc/ssh 
+- Expose Cockpit (HTTP) and sshd:
+  -p 9090:9090 -p 22:22
+
+docker run --name mediapi-gateway --rm \
+  -e CORE_API=https://core.example.com/api \
+  -e CORE_TOKEN=REDACTED \
+  -e COCKPIT_ADDRESS=0.0.0.0 \
+  -e COCKPIT_PORT=9090 \
+  -v mediapi-sshd:/etc/ssh \
+  -v mediapi-run:/run/mediapi \
+  -p 9090:9090 -p 22:22 \
+  mediapi/gateway
+
+Notes
+- Cockpit runs with --no-tls; front this with a TLS reverse proxy in production.
+- sshd accepts only reverse UNIX socket binds; no TCP forwarding.
+- Device sockets appear as /run/mediapi/pi-<deviceId>.ssh.sock and are mapped by SSH config in defaults/ssh/mediapi.conf.

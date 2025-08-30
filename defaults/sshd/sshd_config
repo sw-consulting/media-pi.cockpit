@@ -22,6 +22,12 @@ AllowAgentForwarding no
 ClientAliveInterval 30
 ClientAliveCountMax 3
 
+# Additional hardening and auditing
+LoginGraceTime 30
+MaxStartups 10:30:60
+SyslogFacility AUTHPRIV
+LogLevel VERBOSE
+
 # Dynamic key authorization: let core say yes/no for a device
 # sshd passes: %u (user), %t (type), %f (SHA256:... fp), %k (base64 key)
 AuthorizedKeysCommand /usr/local/bin/ak-lookup %u %t %f %k

@@ -3,7 +3,7 @@
 # If authorized, print a single authorized_keys line with strict options.
 # If not, print nothing and exit non-zero (sshd will deny access).
 
-set -eu
+set -Euo pipefail
 
 USER_ARG="${1:-}"   # expected 'tunnel'
 KEY_TYPE="${2:-}"   # e.g., ssh-ed25519
@@ -21,9 +21,13 @@ FP_ONLY="${FPRINT#SHA256:}"
 FP_URLSAFE="$(printf "%s" "$FP_ONLY" | tr '+/' '-_' | tr -d '=')"
 DEVICE_ID="fp-${FP_URLSAFE}"
 
+# Ensure sshd provided type and key body
+[ -n "${KEY_TYPE}" ] && [ -n "${KEY_B64}" ] || exit 3
+
 # Ask core if this device is allowed (and which sshUser Cockpit should use)
-# Implement GET /api/ssh/authorize?deviceId=<id> in your core (see earlier message)
-RESP="$(curl -fsS -H "Authorization: Bearer ${CORE_TOKEN}" \
+# Implement GET /api/ssh/authorize?deviceId=<id> in your core.
+RESP="$(curl -fsS --connect-timeout 2 --max-time 5 --retry 2 \
+               -H "Authorization: Bearer ${CORE_TOKEN}" \
                "${CORE_API}/ssh/authorize?deviceId=${DEVICE_ID}")" || exit 4
 
 # Parse basic response using jq
