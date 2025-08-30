@@ -22,7 +22,7 @@ DEVICE_ID="fp-${FP_URLSAFE}"
 
 # Ask core if this device is allowed (and which sshUser Cockpit should use)
 # Implement GET /api/ssh/authorize?deviceId=<id> in your core (see earlier message)
-RESP="$(curl -fsS -H "Authorization: Bearer ${CORE_TOKEN}" \
+RESP="$(curl -fsS --connect-timeout 5 --max-time 10 -H "Authorization: Bearer ${CORE_TOKEN}" \
                "${CORE_API}/ssh/authorize?deviceId=${DEVICE_ID}")" || exit 4
 
 # Parse basic response using jq
