@@ -40,4 +40,5 @@ docker run --name mediapi-gateway --rm \
 Notes
 - Cockpit runs with --no-tls; front this with a TLS reverse proxy in production.
 - sshd accepts only reverse UNIX socket binds; no TCP forwarding.
+- Devices do not need to use -N; the server forces a long-running no-op for the tunnel user so the SSH session stays open while reverse sockets are active.
 - Device sockets appear as /run/mediapi/pi-<deviceId>.ssh.sock and are mapped by SSH config in defaults/ssh/mediapi.conf.

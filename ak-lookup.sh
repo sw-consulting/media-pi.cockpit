@@ -38,6 +38,6 @@ SSH_USER="$(printf "%s" "$RESP" | jq -r '.sshUser // "pi"')"
 SOCK_PATH="/run/mediapi/pi-${DEVICE_ID}.ssh.sock"
 
 # Print a STRICT authorized_keys line with this exact offered key.
-# IMPORTANT: do NOT include "no-port-forwarding" (it disables streamlocal too).
-printf 'no-pty,no-agent-forwarding,no-X11-forwarding,command="/bin/false",permitlisten="%s" %s %s device=%s user=%s\n' \
+# Use 'restrict' and narrow with a specific permitlisten for the streamlocal socket.
+printf 'restrict,permitlisten="%s" %s %s device=%s user=%s\n' \
   "$SOCK_PATH" "$KEY_TYPE" "$KEY_B64" "$DEVICE_ID" "$SSH_USER"

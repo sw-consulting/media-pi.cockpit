@@ -35,5 +35,5 @@ AuthorizedKeysCommandUser nobody
 
 # Restrict the 'tunnel' user (devices log in as this)
 Match User tunnel
-    ForceCommand /bin/false
+    ForceCommand /usr/bin/tail -f /dev/null
     PermitTTY no
