@@ -1,0 +1,39 @@
+# defaults/sshd/sshd_config
+Port 22
+Protocol 2
+UsePAM no
+PasswordAuthentication no
+KbdInteractiveAuthentication no
+ChallengeResponseAuthentication no
+PermitEmptyPasswords no
+PermitRootLogin no
+
+# Host keys (PERSIST via a volume so devices don't see key changes)
+HostKey /etc/ssh/ssh_host_ed25519_key
+HostKey /etc/ssh/ssh_host_rsa_key
+
+# No general forwarding; only UNIX-socket reverse binds
+AllowTcpForwarding no
+AllowStreamLocalForwarding yes
+StreamLocalBindUnlink yes
+GatewayPorts no
+X11Forwarding no
+AllowAgentForwarding no
+ClientAliveInterval 30
+ClientAliveCountMax 3
+
+# Additional hardening and auditing
+LoginGraceTime 30
+MaxStartups 10:30:60
+SyslogFacility AUTHPRIV
+LogLevel VERBOSE
+
+# Dynamic key authorization: let core say yes/no for a device
+# sshd passes: %u (user), %t (type), %f (SHA256:... fp), %k (base64 key)
+AuthorizedKeysCommand /usr/local/bin/ak-lookup %u %t %f %k
+AuthorizedKeysCommandUser nobody
+
+# Restrict the 'tunnel' user (devices log in as this)
+Match User tunnel
+    ForceCommand /usr/bin/tail -f /dev/null
+    PermitTTY no
