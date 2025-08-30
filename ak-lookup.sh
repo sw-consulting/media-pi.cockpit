@@ -13,8 +13,7 @@ KEY_B64="${4:-}"    # base64 public key body (no type/comment)
 CORE_API="${CORE_API:-}"     # e.g., https://mediapi.sw.consulting:8085/api
 CORE_TOKEN="${CORE_TOKEN:-}" # shared secret (Bearer)
 
-[ -n "$CORE_API" ] || exit 2
-
+[ -n "$CORE_TOKEN" ] || exit 3
 # Derive deviceId from the fingerprint we were given by sshd.
 # FPRINT looks like "SHA256:AbC/+=" ; make it URL-safe and strip padding.
 FP_ONLY="${FPRINT#SHA256:}"
