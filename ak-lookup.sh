@@ -13,8 +13,7 @@ KEY_B64="${4:-}"    # base64 public key body (no type/comment)
 CORE_API="${CORE_API:-}"     # e.g., https://mediapi.sw.consulting:8085/api
 CORE_TOKEN="${CORE_TOKEN:-}" # shared secret (Bearer)
 
-[ -n "$CORE_API" ] || exit 2
-
+[ -n "$CORE_TOKEN" ] || exit 3
 # Derive deviceId from the fingerprint we were given by sshd.
 # FPRINT looks like "SHA256:AbC/+=" ; make it URL-safe and strip padding.
 FP_ONLY="${FPRINT#SHA256:}"
@@ -25,9 +24,8 @@ DEVICE_ID="fp-${FP_URLSAFE}"
 [ -n "${KEY_TYPE}" ] && [ -n "${KEY_B64}" ] || exit 3
 
 # Ask core if this device is allowed (and which sshUser Cockpit should use)
-# Implement GET /api/ssh/authorize?deviceId=<id> in your core.
-RESP="$(curl -fsS --connect-timeout 2 --max-time 5 --retry 2 \
-               -H "Authorization: Bearer ${CORE_TOKEN}" \
+# Implement GET /api/ssh/authorize?deviceId=<id> in your core (see earlier message)
+RESP="$(curl -fsS --connect-timeout 5 --max-time 10 -H "Authorization: Bearer ${CORE_TOKEN}" \
                "${CORE_API}/ssh/authorize?deviceId=${DEVICE_ID}")" || exit 4
 
 # Parse basic response using jq
