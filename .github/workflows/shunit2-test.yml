@@ -25,9 +25,9 @@ jobs:
           load: true
           tags: mediapi/gateway:latest
 
+        # Build test image with local docker so it can use the locally-loaded mediapi/gateway:latest
       - name: Build test image (with shunit2) using local docker
         run: |
-          # Build test image with local docker so it can use the locally-loaded mediapi/gateway:latest
           docker build -f test.Dockerfile -t media-pi-cockpit-test:test .
 
       - name: List image contents (diagnostic)
