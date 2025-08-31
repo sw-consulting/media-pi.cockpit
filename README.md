@@ -44,3 +44,21 @@ Notes
 - sshd accepts only reverse UNIX socket binds; no TCP forwarding.
 - Devices do not need to use -N; the server forces a long-running no-op for the tunnel user so the SSH session stays open while reverse sockets are active.
 - Device sockets appear as /run/mediapi/pi-<deviceId>.ssh.sock and are mapped by SSH config in defaults/ssh/mediapi.conf.
+
+Testing
+- Unit tests for `ak-lookup.sh` are implemented with `kward/shunit2` and live under `tests/shunit2/ak-lookup_test.sh`.
+- CI: GitHub Actions workflow `.github/workflows/shunit2-test.yml` builds a test image (contains shunit2) and runs the tests inside the container.
+
+Run tests locally (Linux / WSL):
+1. Build the test image:
+```bash
+docker build -f test.Dockerfile -t media-pi-cockpit-test:test .
+```
+2. Run tests inside the image:
+```bash
+docker run --rm -v "$(pwd):/workspace" --entrypoint /bin/bash media-pi-cockpit-test:test -c "cd /workspace && ./tests/shunit2/ak-lookup_test.sh"
+```
+
+Notes
+- The tests mock `curl` by adding `tests/mocks/curl` to `PATH` inside the container. Ensure the `ak-lookup.sh` script is executable (`chmod +x ak-lookup.sh`) before running tests.
+- The repository no longer contains Bats artifacts; testing uses shunit2 exclusively.
