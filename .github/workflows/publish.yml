@@ -69,7 +69,7 @@ jobs:
           labels: |
             org.opencontainers.image.vendor=sw.consulting
             org.opencontainers.image.title=MediaPi Cockpit
-            org.opencontainers.image.source=${{ github.repositoryUrl }}
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
             org.opencontainers.image.description=MediaPi cockpit container
 
       - name: Build and push Docker image
