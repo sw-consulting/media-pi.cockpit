@@ -1,4 +1,4 @@
-name: shunit2 tests
+name: test
 
 on:
   push:
