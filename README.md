@@ -2,6 +2,7 @@
 
 Media PI Cockpit & sshd container that exposes Cockpit Web UI and a restricted SSH endpoint for reverse UNIX socket tunnels from devices. Dynamic SSH key authorization is delegated to the Media Pi Core API.
 
+```
 Project layout
 ├─ gateway.Dockerfile
 ├─ entrypoint.sh
@@ -13,6 +14,7 @@ Project layout
    └─ supervisor/
       ├─ cockpit.conf
       └─ sshd.conf
+```
 
 Requirements
 - CORE_API: Base URL to core API, e.g. https://core.example.com/api
