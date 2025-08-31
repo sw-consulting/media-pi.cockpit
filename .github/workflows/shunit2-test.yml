@@ -36,6 +36,7 @@ jobs:
 
       - name: Run shunit2 tests inside container
         run: |
+          chmod +x ./tests/shunit2/ak-lookup_test.sh
           docker run --rm -v "${{ github.workspace }}:/workspace" \
             --entrypoint /bin/bash media-pi-cockpit-test:test \
             -c "cd /workspace && ./tests/shunit2/ak-lookup_test.sh"
