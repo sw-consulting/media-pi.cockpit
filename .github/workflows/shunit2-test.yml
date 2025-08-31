@@ -34,14 +34,9 @@ jobs:
         run: |
           docker run --rm --entrypoint /bin/ls media-pi-cockpit-test:test -la /
 
-      - name: Check ak-lookup.sh in workspace
-        run: |
-          ls -la ak-lookup.sh
-          chmod +x ak-lookup.sh
-
       - name: Run shunit2 tests inside container
         run: |
           chmod +x ./tests/shunit2/ak-lookup_test.sh
           docker run --rm -v "${{ github.workspace }}:/workspace" \
             --entrypoint /bin/bash media-pi-cockpit-test:test \
-            -c "cd /workspace && ls -la ak-lookup.sh && ./tests/shunit2/ak-lookup_test.sh"
+            -c "cd /workspace && ./tests/shunit2/ak-lookup_test.sh"
