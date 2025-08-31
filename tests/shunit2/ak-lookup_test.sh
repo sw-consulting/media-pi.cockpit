@@ -21,7 +21,7 @@ tearDown() {
 }
 
 run_script() {
-  OUTPUT="$(/usr/local/bin/ak-lookup.sh "$@" 2>&1)"
+  OUTPUT="$(ak-lookup "$@" 2>&1)"
   RC=$?
 }
 
