@@ -12,6 +12,17 @@ setUp() {
   export PATH
   export CORE_API="https://example.com/api"
   export CORE_TOKEN="test-token"
+  
+  # Ensure ak-lookup.sh exists and is executable
+  if [ ! -f "./ak-lookup.sh" ]; then
+    echo "ERROR: ./ak-lookup.sh not found in $(pwd)"
+    ls -la
+    exit 1
+  fi
+  if [ ! -x "./ak-lookup.sh" ]; then
+    echo "Making ./ak-lookup.sh executable"
+    chmod +x ./ak-lookup.sh
+  fi
 }
 
 tearDown() {
