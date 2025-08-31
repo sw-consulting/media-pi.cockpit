@@ -20,7 +20,7 @@ tearDown() {
 }
 
 run_script() {
-  OUTPUT="$(./ak-lookup.sh "$@" 2>&1)" || true
+  OUTPUT="$(./ak-lookup.sh "$@" 2>&1)"
   RC=$?
 }
 
