@@ -5,7 +5,6 @@
 
 set -Euo pipefail
 
-USER_ARG="${1:-}"   # expected 'tunnel'
 KEY_TYPE="${2:-}"   # e.g., ssh-ed25519
 FPRINT="${3:-}"     # e.g., SHA256:AbCdEf...
 KEY_B64="${4:-}"    # base64 public key body (no type/comment)
