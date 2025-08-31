@@ -12,6 +12,7 @@ setUp() {
   export PATH
   export CORE_API="https://example.com/api"
   export CORE_TOKEN="test-token"
+  ls -la /usr/local/bin
 }
 
 tearDown() {
